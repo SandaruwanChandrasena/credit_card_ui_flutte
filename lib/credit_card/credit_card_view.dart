@@ -185,12 +185,22 @@ class _CreditCardViewState extends State<CreditCardView>
     );
   }
 
-  /// Shadow + rounded corners, for both sides.
+  /// SMOOTH CORNERS: radius of the card corners.
+  /// A superellipse corner looks a bit smaller than a normal one,
+  /// so we use 26 here (React uses 20 with normal corners).
+  static const double _cardRadius = 26;
+
+  /// Shadow + smooth rounded corners, for both sides.
+  ///
+  /// "Superellipse" corners (like Apple's app icons) bend slowly into the
+  /// straight edge. Normal rounded corners change shape suddenly where the
+  /// curve starts, so they look less smooth.
   Widget _side(Widget child) {
+    final radius = BorderRadius.circular(_cardRadius);
     return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
+      decoration: ShapeDecoration(
+        shape: RoundedSuperellipseBorder(borderRadius: radius),
+        shadows: const [
           BoxShadow(
             offset: Offset(0, 25),
             blurRadius: 50,
@@ -198,8 +208,11 @@ class _CreditCardViewState extends State<CreditCardView>
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+      child: ClipRSuperellipse(
+        borderRadius: radius,
+        // antiAliasWithSaveLayer gives the softest edge. It matters most
+        // while the card turns in 3D, when edges can look jagged.
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         child: child,
       ),
     );
@@ -271,15 +284,18 @@ class _CreditCardViewState extends State<CreditCardView>
               duration: const Duration(milliseconds: 350),
               curve: smoothCurve,
               opacity: focusVisible ? 1 : 0,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+              // SMOOTH CORNERS: same corner style as the card.
+              child: ClipRSuperellipse(
+                borderRadius: BorderRadius.circular(16),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: ShapeDecoration(
                       color: const Color(0x14FFFFFF),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0x8CFFFFFF), width: 2),
+                      shape: RoundedSuperellipseBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        side: const BorderSide(color: Color(0x8CFFFFFF), width: 2),
+                      ),
                     ),
                   ),
                 ),
@@ -529,10 +545,13 @@ class _CreditCardViewState extends State<CreditCardView>
                     height: 45,
                     padding: const EdgeInsets.only(right: 10),
                     alignment: Alignment.centerRight,
-                    decoration: BoxDecoration(
+                    // SMOOTH CORNERS: same corner style as the card.
+                    decoration: ShapeDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: const [
+                      shape: RoundedSuperellipseBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      shadows: const [
                         BoxShadow(
                           offset: Offset(0, 10),
                           blurRadius: 20,
