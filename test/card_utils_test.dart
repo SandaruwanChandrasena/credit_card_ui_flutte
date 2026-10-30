@@ -69,4 +69,28 @@ void main() {
       expect(run('a' * 40).length, maxNameLength);
     });
   });
+
+  group('CVV', () {
+    test('Amex has 4 digits, other cards have 3', () {
+      expect(cvvLength('3782 822463'), 4);
+      expect(cvvLength('4111 1111'), 3);
+      expect(cvvLength('5112'), 3);
+      expect(cvvLength(''), 3); // no number yet: same as Visa
+    });
+
+    String run(int max, String text) {
+      return CvvFormatter(() => max)
+          .formatEditUpdate(
+            TextEditingValue.empty,
+            TextEditingValue(text: text),
+          )
+          .text;
+    }
+
+    test('keeps digits only and cuts to the length', () {
+      expect(run(3, '1a2b3'), '123');
+      expect(run(3, '12345'), '123');
+      expect(run(4, '12345'), '1234');
+    });
+  });
 }

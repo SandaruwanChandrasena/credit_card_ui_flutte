@@ -82,6 +82,15 @@ String _slice(String text, int start, int end) {
 }
 
 // ---------------------------------------------------------------
+// CVV LENGTH
+// American Express has a 4-digit code (on the front of the card).
+// All other cards have a 3-digit code (on the back).
+// ---------------------------------------------------------------
+int cvvLength(String cardNumber) {
+  return getCardType(cardNumber) == 'amex' ? 4 : 3;
+}
+
+// ---------------------------------------------------------------
 // INPUT FORMATTERS (run on every key press)
 // ---------------------------------------------------------------
 
@@ -116,6 +125,29 @@ class CardNameFormatter extends TextInputFormatter {
     return TextEditingValue(
       text: cleaned,
       selection: TextSelection.collapsed(offset: cleaned.length),
+    );
+  }
+}
+
+/// Keeps only digits, and cuts the CVV to the right length.
+/// [maxLength] is a function, so the limit can change when the
+/// card type changes (3 digits, or 4 for Amex).
+class CvvFormatter extends TextInputFormatter {
+  CvvFormatter(this.maxLength);
+
+  final int Function() maxLength;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    var digits = newValue.text.replaceAll(RegExp(r'\D'), '');
+    final max = maxLength();
+    if (digits.length > max) digits = digits.substring(0, max);
+    return TextEditingValue(
+      text: digits,
+      selection: TextSelection.collapsed(offset: digits.length),
     );
   }
 }

@@ -114,6 +114,26 @@ void main() {
     expect(sideVisible(find.text('FULL NAME')), isTrue);
   });
 
+  testWidgets('CVV is 3 digits, or 4 for Amex', (tester) async {
+    await openPage(tester);
+
+    // Visa (or no number): only 3 digits.
+    await tester.enterText(cvvField, '12345');
+    await tester.pumpAndSettle();
+    expect(textOf(tester, cvvField), '123');
+
+    // Amex: 4 digits.
+    await tester.enterText(numberField, '3782');
+    await tester.enterText(cvvField, '12345');
+    await tester.pumpAndSettle();
+    expect(textOf(tester, cvvField), '1234');
+
+    // Change Amex to Visa: the CVV is cut back to 3 digits.
+    await tester.enterText(numberField, '4111');
+    await tester.pumpAndSettle();
+    expect(textOf(tester, cvvField), '123');
+  });
+
   testWidgets('picking a month shows it on the card', (tester) async {
     await openPage(tester);
 

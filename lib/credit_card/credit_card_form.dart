@@ -57,7 +57,7 @@ class _CreditCardFormPageState extends State<CreditCardFormPage>
     super.initState();
 
     // Rebuild the card on every key press.
-    _numberController.addListener(_refresh);
+    _numberController.addListener(_onNumberChanged);
     _nameController.addListener(_refresh);
     _cvvController.addListener(_refresh);
 
@@ -92,6 +92,17 @@ class _CreditCardFormPageState extends State<CreditCardFormPage>
   }
 
   void _refresh() => setState(() {});
+
+  /// CVV LENGTH: if the card type changes (for example Amex -> Visa),
+  /// the CVV may now be too long. Cut it to the new length.
+  void _onNumberChanged() {
+    final max = cvvLength(_numberController.text);
+    final cvv = _cvvController.text;
+    if (cvv.length > max) {
+      _cvvController.text = cvv.substring(0, max);
+    }
+    setState(() {});
+  }
 
   // ------------------------------------------------------------ FOCUS BOX
 
@@ -421,14 +432,12 @@ class _CreditCardFormPageState extends State<CreditCardFormPage>
 
     final cvv = _CardInput(
       label: 'CVV',
-      hint: '123',
+      // Amex: 4 digits. Other cards: 3 digits.
+      hint: cvvLength(_numberController.text) == 4 ? '1234' : '123',
       controller: _cvvController,
       focusNode: _cvvFocus,
       keyboardType: TextInputType.number,
-      formatters: [
-        FilteringTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(4),
-      ],
+      formatters: [CvvFormatter(() => cvvLength(_numberController.text))],
     );
 
     // Small screens: CVV goes under the date.
