@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Needed to load the card images and fonts from the internet.
+         Debug builds work without it, but release builds need it. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
-        android:label="credit_card_ui_flutte"
+        android:label="Credit Card UI"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
