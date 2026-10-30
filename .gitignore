@@ -1,0 +1,72 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# ---------------------------------------------------------------
+# Added: safety lines (secrets and local files)
+# android/.gitignore already has most of these.
+# They are here too, so they stay safe even if that file changes.
+# ---------------------------------------------------------------
+
+# Android signing keys (NEVER push these)
+*.jks
+*.keystore
+**/android/key.properties
+
+# Local paths to your Flutter and Android SDK (different on every PC)
+**/android/local.properties
+
+# Gradle cache and native build files
+**/android/.gradle/
+**/android/app/.cxx/
+
+# Secret keys and API keys
+.env
+.env.*
+!.env.example
+
+# Flutter version manager (only if you use FVM)
+.fvm/
