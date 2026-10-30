@@ -51,18 +51,25 @@ class _CustomSelectState extends State<CustomSelect>
   // Taps inside the box OR inside the menu are "inside".
   final Object _tapGroup = Object();
 
-  late final AnimationController _menuController = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 200),
-    reverseDuration: const Duration(milliseconds: 180),
-  );
-  late final Animation<double> _menuAnim = CurvedAnimation(
-    parent: _menuController,
-    curve: Curves.ease,
-  );
+  // FIX: these are made in initState, not "late" on first use.
+  // Before, if a menu was never opened, the controller was made for the
+  // first time inside dispose(). That is not allowed and threw an error.
+  late final AnimationController _menuController;
+  late final Animation<double> _menuAnim;
 
   bool _open = false;
   double _width = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _menuController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+      reverseDuration: const Duration(milliseconds: 180),
+    );
+    _menuAnim = CurvedAnimation(parent: _menuController, curve: Curves.ease);
+  }
 
   void _openMenu() {
     if (_open) return;
