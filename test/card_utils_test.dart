@@ -1,11 +1,9 @@
-// widget_test.dart
-// Tests for the card rules in card_utils.dart.
-// Run with:  flutter test
+// card_utils_test.dart
+// Unit tests for the card rules in card_utils.dart.
+// (This was widget_test.dart before. The name is clearer now.)
 //
-// We test the pure functions (no widgets), so the tests do not need
-// the internet for images or fonts.
+// Run with:  flutter test test/card_utils_test.dart
 
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:credit_card_ui_flutte/credit_card/card_utils.dart';

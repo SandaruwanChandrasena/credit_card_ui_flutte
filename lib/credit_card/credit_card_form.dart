@@ -10,8 +10,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'card_config.dart';
 import 'card_utils.dart';
 import 'credit_card_view.dart';
 import 'custom_select.dart';
@@ -76,11 +75,11 @@ class _CreditCardFormPageState extends State<CreditCardFormPage>
     // LOGO FADE: download all logos at the start, so a change shows at once.
     if (!_logosLoaded) {
       _logosLoaded = true;
-      for (final type in cardTypes) {
-        precacheImage(NetworkImage(logoUrl(type)), context);
-      }
-      precacheImage(const NetworkImage(chipUrl), context);
-      precacheImage(const NetworkImage(cardBackgroundUrl), context);
+      CardConfig.precache(context, [
+        for (final type in cardTypes) logoUrl(type),
+        chipUrl,
+        cardBackgroundUrl,
+      ]);
 
       // Phone setting "remove animations": skip the entry animation.
       final reduceMotion = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
@@ -481,7 +480,7 @@ class _CardInput extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.sourceSans3(
+          style: CardConfig.sans(
             fontSize: 14,
             fontWeight: FontWeight.w700,
             color: const Color(0xFF334155),
@@ -520,13 +519,13 @@ class _CardInput extends StatelessWidget {
             inputFormatters: formatters,
             autocorrect: false,
             enableSuggestions: false,
-            style: GoogleFonts.sourceSans3(
+            style: CardConfig.sans(
               fontSize: 17,
               color: const Color(0xFF1A2B4B),
             ),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: GoogleFonts.sourceSans3(
+              hintStyle: CardConfig.sans(
                 fontSize: 17,
                 color: const Color(0xFF94A3B8),
               ),
@@ -585,7 +584,7 @@ class _PayButtonState extends State<_PayButton> {
           ),
           child: Text(
             'Pay Now',
-            style: GoogleFonts.sourceSans3(
+            style: CardConfig.sans(
               fontSize: 20,
               fontWeight: FontWeight.w700,
               color: Colors.white,

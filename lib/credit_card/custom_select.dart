@@ -7,7 +7,7 @@
 // - a tap outside closes it
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'card_config.dart';
 
 class SelectOption {
   const SelectOption(this.value, this.label);
@@ -114,7 +114,7 @@ class _CustomSelectState extends State<CustomSelect>
         children: [
           Text(
             widget.label,
-            style: GoogleFonts.sourceSans3(
+            style: CardConfig.sans(
               fontSize: 14,
               fontWeight: FontWeight.w700,
               color: const Color(0xFF334155),
@@ -167,7 +167,7 @@ class _CustomSelectState extends State<CustomSelect>
               child: Text(
                 shownValue ?? widget.placeholder,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.sourceSans3(
+                style: CardConfig.sans(
                   fontSize: 17,
                   color: shownValue == null
                       ? const Color(0xFF94A3B8)
@@ -272,7 +272,7 @@ class _CustomSelectState extends State<CustomSelect>
           ),
           child: Text(
             option.label,
-            style: GoogleFonts.sourceSans3(
+            style: CardConfig.sans(
               fontSize: 16,
               fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
               color: selected ? const Color(0xFF1D4ED8) : const Color(0xFF1E3354),

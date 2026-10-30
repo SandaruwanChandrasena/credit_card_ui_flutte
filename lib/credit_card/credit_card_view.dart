@@ -2,8 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'card_config.dart';
 import 'card_utils.dart';
 import 'enter_animation.dart';
 
@@ -218,10 +217,9 @@ class _CreditCardViewState extends State<CreditCardView>
             colors: [Color(0x2E0C1225), Color(0x730C1225)],
           ),
         ),
-        child: Image.network(
+        child: CardConfig.image(
           cardBackgroundUrl,
           fit: BoxFit.cover,
-          errorBuilder: (_, _, _) => const SizedBox.shrink(),
         ),
       ),
     );
@@ -238,11 +236,10 @@ class _CreditCardViewState extends State<CreditCardView>
         from: const Offset(0, -8),
         scaleFrom: 0.85,
         duration: const Duration(milliseconds: 400),
-        child: Image.network(
+        child: CardConfig.image(
           logoUrl(type),
           fit: BoxFit.contain,
           alignment: Alignment.topRight,
-          errorBuilder: (_, _, _) => const SizedBox.shrink(),
         ),
       ),
     );
@@ -293,7 +290,7 @@ class _CreditCardViewState extends State<CreditCardView>
 
         // Card text
         DefaultTextStyle(
-          style: GoogleFonts.sourceCodePro(
+          style: CardConfig.code(
             color: Colors.white,
             fontWeight: FontWeight.w500,
             height: 1,
@@ -313,11 +310,10 @@ class _CreditCardViewState extends State<CreditCardView>
                       SizedBox(
                         width: 60,
                         height: 45,
-                        child: Image.network(
+                        child: CardConfig.image(
                           chipUrl,
                           fit: BoxFit.contain,
                           alignment: Alignment.topLeft,
-                          errorBuilder: (_, _, _) => const SizedBox.shrink(),
                         ),
                       ),
                       const Spacer(),
@@ -475,13 +471,23 @@ class _CreditCardViewState extends State<CreditCardView>
         children: [
           const Opacity(
             opacity: 0.8,
-            child: Text('Expires', style: TextStyle(fontSize: 13)),
+            child: Text(
+              'Expires',
+              softWrap: false,
+              style: TextStyle(fontSize: 13),
+            ),
           ),
           const SizedBox(height: 6),
-          DefaultTextStyle.merge(
-            style: const TextStyle(fontSize: 18),
-            child: Row(
-              children: [part(month), const Text('/'), part(year)],
+          // Shrinks a little if the font is wide, so it never overflows.
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: DefaultTextStyle.merge(
+              style: const TextStyle(fontSize: 18),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [part(month), const Text('/'), part(year)],
+              ),
             ),
           ),
         ],
@@ -510,7 +516,7 @@ class _CreditCardViewState extends State<CreditCardView>
                     padding: const EdgeInsets.only(right: 10),
                     child: Text(
                       'CVV',
-                      style: GoogleFonts.sourceSans3(
+                      style: CardConfig.sans(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
@@ -547,7 +553,7 @@ class _CreditCardViewState extends State<CreditCardView>
                             padding: const EdgeInsets.only(left: 3),
                             child: Text(
                               '*',
-                              style: GoogleFonts.sourceSans3(
+                              style: CardConfig.sans(
                                 fontSize: 18,
                                 color: const Color(0xFF1A3B5D),
                               ),
